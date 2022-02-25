@@ -126,22 +126,23 @@ redirectToArticles()
   const updateArticle = ({ article_id, article }) => {
     // ✨ implement
     // You got this!
-    setSpinnerOn(true)
-    AxiosWithAuth().put(
-      `${articlesUrl}/${article_id}`, article
-      { title: article.title, text: article.text, topic: article.topic }
-    )
+    axiosWithAuth().put(`${articlesUrl}/${article_id}`, article)
       .then(res => {
-        setMessage(`Update succesful, ${username}`)
-        setArticles([...articles, res.data.articles])
-        setMessage(res.data.message)
+        setArticles(articles.map(art => {
+
+          setSpinnerOn(true)
+          return (art.id == id) ? res.data.article : art
+        }))
+        setCurrentArticleId()
       })
       .catch(err => {
-        console.error(err)
+    console.log(err)
       })
-      .finally(() => {
-        setSpinnerOn(false)
-      })
+.finally(()=>{
+  setSpinnerOn(false)
+})
+
+  
 
       const rtnArray = []
       for(let i = 0; i < articles.length; i++) {
